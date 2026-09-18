@@ -1,3 +1,8 @@
+## Live Demo
+
+[View Live Website](https://tamannamurad.github.io/dictionary_project/)
+
+
 # 📖 Dictionary App
 
 A simple and responsive dictionary web application that allows users to search for any English word and instantly view its **definitions**, **synonyms**, and **antonyms**.
