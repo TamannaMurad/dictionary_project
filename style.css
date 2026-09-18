@@ -23,7 +23,8 @@ body {
 
   background: rgba(255, 255, 255, 0.18);
 
-  --webkit-backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  backdrop-filter: blur(18px);
 
   border-radius: 20px;
 
@@ -47,16 +48,16 @@ h1 {
 .search-box {
   display: flex;
   gap: 15px;
-  flex-wrap: wrap;
 }
 
 input {
   flex: 1;
 
+  min-width: 0;
+
   padding: 16px;
 
   border: none;
-
   outline: none;
 
   border-radius: 12px;
@@ -84,7 +85,6 @@ button {
 
 button:hover {
   background: #0b5ed7;
-
   transform: translateY(-2px);
 }
 
@@ -129,12 +129,142 @@ button:disabled {
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
 }
 
-@media (max-width: 600px) {
-  .search-box {
-    flex-direction: column;
+/* =========================
+   Tablet
+========================= */
+
+@media (max-width: 768px) {
+  body {
+    padding: 15px;
   }
 
-  button {
+  .container {
+    padding: 30px 25px;
+  }
+
+  h1 {
+    font-size: 34px;
+  }
+
+  .container p {
+    margin-bottom: 25px;
+  }
+}
+
+/* =========================
+   Mobile
+========================= */
+
+@media (max-width: 600px) {
+  body {
+    padding: 10px;
+
+    align-items: flex-start;
+  }
+
+  .container {
     width: 100%;
+
+    padding: 25px 18px;
+
+    border-radius: 16px;
+
+    margin-top: 20px;
+  }
+
+  h1 {
+    font-size: 28px;
+  }
+
+  .container p {
+    font-size: 14px;
+
+    margin: 10px 0 25px;
+  }
+
+  .search-box {
+    flex-direction: column;
+
+    gap: 10px;
+  }
+
+  input {
+    width: 100%;
+
+    padding: 14px;
+
+    font-size: 16px;
+  }
+
+  #searchBtn {
+    width: 100%;
+
+    padding: 14px;
+  }
+
+  #playAudio {
+    width: 100%;
+
+    margin-top: 15px;
+
+    padding: 14px;
+  }
+
+  #loading {
+    font-size: 16px;
+
+    margin-top: 15px;
+  }
+
+  #ul {
+    margin-top: 20px;
+  }
+
+  #ul li {
+    padding: 16px;
+
+    margin-bottom: 14px;
+
+    font-size: 14px;
+
+    line-height: 1.7;
+
+    border-radius: 12px;
+  }
+}
+
+/* =========================
+   Very Small Mobile
+========================= */
+
+@media (max-width: 400px) {
+  body {
+    padding: 6px;
+  }
+
+  .container {
+    padding: 20px 14px;
+
+    margin-top: 10px;
+  }
+
+  h1 {
+    font-size: 24px;
+  }
+
+  .container p {
+    font-size: 13px;
+  }
+
+  input,
+  #searchBtn,
+  #playAudio {
+    font-size: 14px;
+  }
+
+  #ul li {
+    padding: 14px;
+
+    font-size: 13px;
   }
 }
