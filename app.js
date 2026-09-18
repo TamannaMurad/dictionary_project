@@ -32,13 +32,14 @@ async function searchWord() {
   loading.textContent = "";
 
   if (!entry) {
-    alert("Word not found.");
     return;
   }
 
+  // Reset previous audio
   audioUrl = "";
 
-  for (const phonetic of entry.phonetics) {
+  // Find pronunciation audio
+  for (const phonetic of entry.phonetics || []) {
     if (phonetic.audio) {
       audioUrl = phonetic.audio;
       break;
@@ -47,18 +48,22 @@ async function searchWord() {
 
   playButton.disabled = !audioUrl;
 
+  // Get definitions, synonyms and antonyms
   entry.meanings.forEach((meaning) => {
-    synonyms.push(...meaning.synonyms);
-    antonyms.push(...meaning.antonyms);
+    synonyms.push(...(meaning.synonyms || []));
+    antonyms.push(...(meaning.antonyms || []));
 
     meaning.definitions.forEach((def) => {
       definitions.push(def.definition);
 
-      synonyms.push(...def.synonyms);
-
-      antonyms.push(...def.antonyms);
+      synonyms.push(...(def.synonyms || []));
+      antonyms.push(...(def.antonyms || []));
     });
   });
+
+  // Remove duplicate synonyms and antonyms
+  const uniqueSynonyms = [...new Set(synonyms)];
+  const uniqueAntonyms = [...new Set(antonyms)];
 
   const defs = `📖 Definitions
 
@@ -66,19 +71,11 @@ async function searchWord() {
 
   const syns = `🔹 Synonyms
 
-${
-  [...new Set(synonyms)].length
-    ? [...new Set(synonyms)].join(", ")
-    : "No synonyms found"
-}`;
+${uniqueSynonyms.length ? uniqueSynonyms.join(", ") : "No synonyms found"}`;
 
   const ants = `🔸 Antonyms
 
-${
-  [...new Set(antonyms)].length
-    ? [...new Set(antonyms)].join(", ")
-    : "No antonyms found"
-}`;
+${uniqueAntonyms.length ? uniqueAntonyms.join(", ") : "No antonyms found"}`;
 
   show([defs, syns, ants]);
 }
@@ -104,14 +101,29 @@ function show(collections) {
 }
 
 async function getWordData(word) {
-  const url = `https://api.dictionaryapi.dev/api/v2/entries/en/${word}`;
+  const url = `https://api.dictionaryapi.dev/api/v2/entries/en/${encodeURIComponent(word)}`;
 
   try {
     const response = await axios.get(url);
 
     return response.data[0];
   } catch (error) {
-    console.error(error);
+    console.error("API Error:", error);
+
+    if (error.response) {
+      // API responded with an error
+      if (error.response.status === 404) {
+        alert("Word not found.");
+      } else {
+        alert(`API Error: ${error.response.status}`);
+      }
+    } else if (error.request) {
+      // Request was sent but no response was received
+      alert("Unable to connect to the Dictionary API. Please try again later.");
+    } else {
+      // Something went wrong while creating the request
+      alert("Something went wrong. Please try again.");
+    }
 
     return null;
   }
